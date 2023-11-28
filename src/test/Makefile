@@ -20,7 +20,7 @@ LDFLAGS=$(shell sst-config --ELEMENT_LDFLAGS)
 CPPFLAGS=-I./
 OPTIMIZE_FLAGS=-O2
 
-COMPONENT_LIB=libsstData.so
+COMPONENT_LIB=libsstdata.so
 
 BASICCOMPONENT_SOURCES := $(wildcard *.cc)
 
@@ -42,7 +42,7 @@ $(COMPONENT_LIB): $(BASICCOMPONENT_INCS) $(BASICCOMPONENT_OBJS)
 %.inc:%.py
 	od -v -t x1 < $< | sed -e 's/^[^ ]*[ ]*//g' -e '/^\s*$$/d' -e 's/\([0-9a-f]*\)[ $$]*/0x\1,/g' > $@
 install: $(COMPONENT_LIB)
-	sst-register sstData sstData_LIBDIR=$(CURDIR)
+	sst-register sstdata sstdata_LIBDIR=$(CURDIR)
 clean:
 	rm -Rf *.o *.inc $(COMPONENT_LIB)
 

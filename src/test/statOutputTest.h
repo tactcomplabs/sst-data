@@ -9,7 +9,6 @@ namespace SST::Statistics{
 class SSTDataBase : public StatisticFieldsOutput{
 public:
   SST_ELI_DECLARE_BASE(SST::Statistics::SSTDataBase);
-  //SST_ELI_REGISTER_EXTERN(StatisticFieldsOutput, SSTDataBase)
   SSTDataBase(Params& outputParameters)
     : StatisticFieldsOutput(outputParameters){}
 protected:
@@ -37,7 +36,7 @@ public:
   SST_ELI_REGISTER_DERIVED(
     SSTDataBase,
     StatisticOutputTest,
-    "sstData",
+    "sstdata",
     "statoutputtest",
     SST_ELI_ELEMENT_VERSION(1,0,0),
     "Output test"

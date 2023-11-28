@@ -9,9 +9,11 @@ StatisticOutputTest::StatisticOutputTest(Params& outputParameters)
   : SSTDataBase(outputParameters){
 //    m_useCompression = outputParameters.find<bool>("compressed");
     // Announce this output object's name
-    //Output& out      = Simulation_impl::getSimulationOutput();
-    //out.verbose(CALL_INFO, 1, 0, " : StatisticOutputTest enabled...\n");
-    setStatisticOutputName("StatisticOutputTest");
+  //Output& out      = Simulation_impl::getSimulationOutput();
+  std::cout << "BOGUS" << std::endl;
+  //Output out("", 0, 0, Output::STDOUT);
+  //out.verbose(CALL_INFO, 1, 0, " : StatisticOutputTest enabled...\n");
+  setStatisticOutputName("StatisticOutputTest");
 }
 
 bool StatisticOutputTest::checkOutputParameters(){
