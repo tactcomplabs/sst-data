@@ -26,33 +26,43 @@ void StatisticOutputTest::printUsage(){
 }
 
 void StatisticOutputTest::startOfSimulation(){
+  std::cout << "startOfSimulation" << std::endl;
 }
 
 void StatisticOutputTest::endOfSimulation(){
+  std::cout << "endOfSimulation" << std::endl;
 }
 
 void StatisticOutputTest::implStartOutputEntries(StatisticBase* statistic){
+  std::cout << "implStartOutputEntries" << std::endl;
 }
 
 void StatisticOutputTest::implStopOutputEntries(){
+  std::cout << "implStopOutputEntries" << std::endl;
 }
 
 void StatisticOutputTest::outputField(fieldHandle_t fieldHandle, int32_t data){
+  std::cout << "outputField-int" << std::endl;
 }
 
 void StatisticOutputTest::outputField(fieldHandle_t fieldHandle, uint32_t data){
+  std::cout << "outputField-uint" << std::endl;
 }
 
 void StatisticOutputTest::outputField(fieldHandle_t fieldHandle, int64_t data){
+  std::cout << "outputField-long" << std::endl;
 }
 
 void StatisticOutputTest::outputField(fieldHandle_t fieldHandle, uint64_t data){
+  std::cout << "outputField-ulong" << std::endl;
 }
 
 void StatisticOutputTest::outputField(fieldHandle_t fieldHandle, float data){
+  std::cout << "outputField-float" << std::endl;
 }
 
 void StatisticOutputTest::outputField(fieldHandle_t fieldHandle, double data){
+  std::cout << "outputField-double" << std::endl;
 }
 
 };  // end SST::Statistics

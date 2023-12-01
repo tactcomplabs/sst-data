@@ -1,3 +1,4 @@
+#pragma once
 #ifndef STAT_OUTPUT_TEST_H_
 #define STAT_OUTPUT_TEST_H_
 
@@ -18,6 +19,7 @@ protected:
   void endOfSimulation() = 0;
   void implStartOutputEntries(StatisticBase* statistic) = 0;
   void implStopOutputEntries() = 0;
+
   void outputField(fieldHandle_t fieldHandle, int32_t data) = 0;
   void outputField(fieldHandle_t fieldHandle, uint32_t data) = 0;
   void outputField(fieldHandle_t fieldHandle, int64_t data) = 0;

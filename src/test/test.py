@@ -21,7 +21,7 @@ gen.addParams({"verbose" : 0,
 # Tell SST what statistics handling we want
 
 # Enable statistics outputs
-comp_cpu.enableAllStatistics({"type":"sst.AccumulatorStatistic"})
+comp_cpu.enableAllStatistics({"type":"sst.AccumulatorStatistic", "rate" : "5 hz"})
 
 comp_l1cache = sst.Component("l1cache", "memHierarchy.Cache")
 comp_l1cache.addParams({
