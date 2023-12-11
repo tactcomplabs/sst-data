@@ -7,4 +7,13 @@
 # See LICENSE in the top level directory for licensing details
 #
 
+set(SSTDataHdrs
+  sstdata.h
+)
+
+install(DIRECTORY "."
+        DESTINATION "include/sstdata"
+        FILES_MATCHING
+        PATTERN "*.h")
+
 # EOF
