@@ -11,8 +11,8 @@ StatisticOutputTest::StatisticOutputTest(Params& outputParameters)
   //m_useCompression = outputParameters.find<bool>("compressed");
   //Announce this output object's name
   //Output& out      = Simulation_impl::getSimulationOutput();
-  //std::cout << "BOGUS" << std::endl;
   //Output out("", 0, 0, Output::STDOUT);
+  //std::cout << "BOGUS" << std::endl;
   //out.verbose(CALL_INFO, 1, 0, " : StatisticOutputTest enabled...\n");
   setStatisticOutputName("StatisticOutputTest");
 }
@@ -35,32 +35,32 @@ void StatisticOutputTest::endOfSimulation(){
 }
 
 static bool fieldTypeToArrowField(std::vector<StatisticOutputTest::ArrowBuilders> & builders, std::vector<std::shared_ptr<arrow::Field>> & fields, std::string const& field_str, const char * ft_cstr) {
-    if(std::strncmp(ft_cstr, "int32_t", 7)) {
+    if(std::strncmp(ft_cstr, "int32_t", 7) == 0) {
         fields.push_back(arrow::field(field_str, arrow::int32()));
         builders.push_back(arrow::Int32Builder{});
         return true;
     }
-    else if(std::strncmp(ft_cstr, "int64_t", 7)) {
+    else if(std::strncmp(ft_cstr, "int64_t", 7) == 0) {
         fields.push_back(arrow::field(field_str, arrow::int64()));
         builders.push_back(arrow::Int64Builder{});
         return true;
     }
-    else if(std::strncmp(ft_cstr, "uint32_t", 8)) {
+    else if(std::strncmp(ft_cstr, "uint32_t", 8) == 0) {
         fields.push_back(arrow::field(field_str, arrow::uint32()));
         builders.push_back(arrow::UInt32Builder{});
         return true;
     }
-    else if(std::strncmp(ft_cstr, "uint64_t", 8)) {
+    else if(std::strncmp(ft_cstr, "uint64_t", 8) == 0) {
         fields.push_back(arrow::field(field_str, arrow::uint64()));
         builders.push_back(arrow::UInt64Builder{});
         return true;
     }
-    else if(std::strncmp(ft_cstr, "float", 5)) {
+    else if(std::strncmp(ft_cstr, "float", 5) == 0) {
         fields.push_back(arrow::field(field_str, arrow::float32()));
         builders.push_back(arrow::FloatBuilder{});
         return true;
     }
-    else if(std::strncmp(ft_cstr, "double", 6)) {
+    else if(std::strncmp(ft_cstr, "double", 6) == 0) {
         fields.push_back(arrow::field(field_str, arrow::float64()));
         builders.push_back(arrow::DoubleBuilder{});
         return true;
@@ -115,9 +115,7 @@ void StatisticOutputTest::implStopOutputEntries() {
   arrays.reserve(builders.size());
 
   int64_t max_length = 0;
-  for(auto i = 0; i < builders.size(); ++i) {
-     max_length = std::max(max_length, arrays[i]->length());
-
+  for(std::size_t i = 0; i < builders.size(); ++i) {
      if(std::holds_alternative<arrow::Int32Builder>(builders[i])) {
        arrays.push_back(std::get<arrow::Int32Builder>(builders[i]).Finish().ValueOrDie());
      }
@@ -139,6 +137,8 @@ void StatisticOutputTest::implStopOutputEntries() {
      else if(std::holds_alternative<arrow::NullBuilder>(builders[i])) {
        arrays.push_back(std::get<arrow::NullBuilder>(builders[i]).Finish().ValueOrDie());
      }
+
+     max_length = std::max(max_length, arrays[i]->length());
   };
 
   auto res = arrow::RecordBatch::Make(schemas.back(), max_length, arrays);
@@ -147,27 +147,61 @@ void StatisticOutputTest::implStopOutputEntries() {
 }
 
 void StatisticOutputTest::outputField(fieldHandle_t fieldHandle, int32_t data){
-  std::get<arrow::Int32Builder>(builders[fieldHandle]).Append(data);
+  if(std::holds_alternative<arrow::Int32Builder>(builders[fieldHandle])) {
+    std::get<arrow::Int32Builder>(builders[fieldHandle]).Append(data);
+  }
+  else {
+    std::cerr << "error\t" << builders[fieldHandle].index() << ' ' << fieldHandle << std::endl;
+  }
+
 }
 
 void StatisticOutputTest::outputField(fieldHandle_t fieldHandle, uint32_t data){
-  std::get<arrow::UInt32Builder>(builders[fieldHandle]).Append(data);
+  if(std::holds_alternative<arrow::UInt32Builder>(builders[fieldHandle])) {
+    std::get<arrow::UInt32Builder>(builders[fieldHandle]).Append(data);
+  }
+  else {
+    std::cerr << "error\t" << builders[fieldHandle].index() << ' ' << fieldHandle << std::endl;
+  }
+
 }
 
 void StatisticOutputTest::outputField(fieldHandle_t fieldHandle, int64_t data){
-  std::get<arrow::Int64Builder>(builders[fieldHandle]).Append(data);
+  if(std::holds_alternative<arrow::Int64Builder>(builders[fieldHandle])) {
+    std::get<arrow::Int64Builder>(builders[fieldHandle]).Append(data);
+  }
+  else {
+    std::cerr << "error\t" << builders[fieldHandle].index() << ' ' << fieldHandle << std::endl;
+  }
+
 }
 
 void StatisticOutputTest::outputField(fieldHandle_t fieldHandle, uint64_t data){
-  std::get<arrow::UInt64Builder>(builders[fieldHandle]).Append(data);
+  if(std::holds_alternative<arrow::UInt64Builder>(builders[fieldHandle])) {
+    std::get<arrow::UInt64Builder>(builders[fieldHandle]).Append(data);
+  }
+  else {
+    std::cerr << "error\t" << builders[fieldHandle].index() << ' ' << fieldHandle << std::endl;
+  }
 }
 
 void StatisticOutputTest::outputField(fieldHandle_t fieldHandle, float data){
-  std::get<arrow::FloatBuilder>(builders[fieldHandle]).Append(data);
+  if(std::holds_alternative<arrow::FloatBuilder>(builders[fieldHandle])) {
+    std::get<arrow::FloatBuilder>(builders[fieldHandle]).Append(data);
+  }
+  else {
+    std::cerr << "error\t" << builders[fieldHandle].index() << ' ' << fieldHandle << std::endl;
+  }
 }
 
 void StatisticOutputTest::outputField(fieldHandle_t fieldHandle, double data){
-  std::get<arrow::DoubleBuilder>(builders[fieldHandle]).Append(data);
+  if(std::holds_alternative<arrow::DoubleBuilder>(builders[fieldHandle])) {
+    std::get<arrow::DoubleBuilder>(builders[fieldHandle]).Append(data);
+  }
+  else {
+    std::cerr << "error\t" << builders[fieldHandle].index() << ' ' << fieldHandle << std::endl;
+  }
+
 }
 
 };  // end SST::Statistics
