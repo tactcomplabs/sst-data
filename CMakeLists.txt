@@ -91,6 +91,9 @@ set(SSTDATA_INCLUDE_PATH "${CMAKE_CURRENT_SOURCE_PATH}/sstdata/include" CACHE PA
 #-- Arrow Dependency
 
 find_package(Arrow REQUIRED)
+if(NOT Arrow_FOUND)
+  message(FATAL_ERROR "Arrow not found, find $CMAKE_INSTALL_PREFIX for Arrow")
+endif()
 
 #-- Custom Commands
 add_custom_target(uninstall COMMAND "${CMAKE_CURRENT_SOURCE_DIR}/scripts/uninstall.sh")
