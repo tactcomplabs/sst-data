@@ -88,6 +88,10 @@ endif()
 #-- SST-Data Paths
 set(SSTDATA_INCLUDE_PATH "${CMAKE_CURRENT_SOURCE_PATH}/sstdata/include" CACHE PATH "SST-Data include path")
 
+#-- Arrow Dependency
+
+find_package(Arrow REQUIRED)
+
 #-- Custom Commands
 add_custom_target(uninstall COMMAND "${CMAKE_CURRENT_SOURCE_DIR}/scripts/uninstall.sh")
 

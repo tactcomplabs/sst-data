@@ -10,13 +10,17 @@
 # See LICENSE in the top level directory for licensing details
 #
 
+ifeq (, $(shell which pkg-config))
+ $(error "No pkg-config in $(PATH), add `pkg-config` to your PATH")
+endif
+
 ifeq (, $(shell which sst-config))
  $(error "No sst-config in $(PATH), add `sst-config` to your PATH")
 endif
 
 CXX=$(shell sst-config --CXX)
-CXXFLAGS=$(shell sst-config --ELEMENT_CXXFLAGS)
-LDFLAGS=$(shell sst-config --ELEMENT_LDFLAGS)
+CXXFLAGS=$(shell sst-config --ELEMENT_CXXFLAGS) $(shell pkg-config --cflags arrow)
+LDFLAGS=$(shell sst-config --ELEMENT_LDFLAGS) $(shell pkg-config --libs arrow)
 CPPFLAGS=-I./
 OPTIMIZE_FLAGS=-O2
 
