@@ -94,9 +94,8 @@ void StatisticOutputTest::implStartOutputEntries(StatisticBase* statistic){
   bool rv = false;
 
   std::vector<std::shared_ptr<arrow::Field>> fields;
-  fields.reserve(arr.size());
-  builders.reserve(arr.size());
-
+  fields.reserve(arr.size()-1);
+  builders.reserve(arr.size()-1);
   for(FieldInfoArray_t::iterator itr = arr.begin(); itr != arr.end(); itr++) {
     val = *itr;
     ft = val->getFieldType();
@@ -151,9 +150,30 @@ void StatisticOutputTest::outputField(fieldHandle_t fieldHandle, int32_t data){
     std::get<arrow::Int32Builder>(builders[fieldHandle]).Append(data);
   }
   else {
-    std::cerr << "error\t" << builders[fieldHandle].index() << ' ' << fieldHandle << std::endl;
+    switch(builders[fieldHandle].index()) {
+        case 1:
+           std::get<arrow::Int32Builder>(builders[fieldHandle]).Append(static_cast<std::int32_t>(data));
+        break;
+        case 2:
+           std::get<arrow::Int64Builder>(builders[fieldHandle]).Append(static_cast<std::int64_t>(data));
+        break;
+        case 3:
+           std::get<arrow::UInt32Builder>(builders[fieldHandle]).Append(static_cast<std::uint32_t>(data));
+        break;
+        case 4:
+           std::get<arrow::UInt64Builder>(builders[fieldHandle]).Append(static_cast<std::uint64_t>(data));
+        break;
+        case 5:
+           std::get<arrow::FloatBuilder>(builders[fieldHandle]).Append(static_cast<float>(data));
+        break;
+        case 6:
+           std::get<arrow::DoubleBuilder>(builders[fieldHandle]).Append(static_cast<double>(data));
+        break;
+        default:
+           std::cerr << "error\t" << builders[fieldHandle].index() << ' ' << fieldHandle << std::endl;
+        break;
+    }
   }
-
 }
 
 void StatisticOutputTest::outputField(fieldHandle_t fieldHandle, uint32_t data){
@@ -161,9 +181,30 @@ void StatisticOutputTest::outputField(fieldHandle_t fieldHandle, uint32_t data){
     std::get<arrow::UInt32Builder>(builders[fieldHandle]).Append(data);
   }
   else {
-    std::cerr << "error\t" << builders[fieldHandle].index() << ' ' << fieldHandle << std::endl;
+    switch(builders[fieldHandle].index()) {
+        case 1:
+           std::get<arrow::Int32Builder>(builders[fieldHandle]).Append(static_cast<std::int32_t>(data));
+        break;
+        case 2:
+           std::get<arrow::Int64Builder>(builders[fieldHandle]).Append(static_cast<std::int64_t>(data));
+        break;
+        case 3:
+           std::get<arrow::UInt32Builder>(builders[fieldHandle]).Append(static_cast<std::uint32_t>(data));
+        break;
+        case 4:
+           std::get<arrow::UInt64Builder>(builders[fieldHandle]).Append(static_cast<std::uint64_t>(data));
+        break;
+        case 5:
+           std::get<arrow::FloatBuilder>(builders[fieldHandle]).Append(static_cast<float>(data));
+        break;
+        case 6:
+           std::get<arrow::DoubleBuilder>(builders[fieldHandle]).Append(static_cast<double>(data));
+        break;
+        default:
+           std::cerr << "error\t" << builders[fieldHandle].index() << ' ' << fieldHandle << std::endl;
+        break;
+    }
   }
-
 }
 
 void StatisticOutputTest::outputField(fieldHandle_t fieldHandle, int64_t data){
@@ -171,9 +212,30 @@ void StatisticOutputTest::outputField(fieldHandle_t fieldHandle, int64_t data){
     std::get<arrow::Int64Builder>(builders[fieldHandle]).Append(data);
   }
   else {
-    std::cerr << "error\t" << builders[fieldHandle].index() << ' ' << fieldHandle << std::endl;
+    switch(builders[fieldHandle].index()) {
+        case 1:
+           std::get<arrow::Int32Builder>(builders[fieldHandle]).Append(static_cast<std::int32_t>(data));
+        break;
+        case 2:
+           std::get<arrow::Int64Builder>(builders[fieldHandle]).Append(static_cast<std::int64_t>(data));
+        break;
+        case 3:
+           std::get<arrow::UInt32Builder>(builders[fieldHandle]).Append(static_cast<std::uint32_t>(data));
+        break;
+        case 4:
+           std::get<arrow::UInt64Builder>(builders[fieldHandle]).Append(static_cast<std::uint64_t>(data));
+        break;
+        case 5:
+           std::get<arrow::FloatBuilder>(builders[fieldHandle]).Append(static_cast<float>(data));
+        break;
+        case 6:
+           std::get<arrow::DoubleBuilder>(builders[fieldHandle]).Append(static_cast<double>(data));
+        break;
+        default:
+           std::cerr << "error\t" << builders[fieldHandle].index() << ' ' << fieldHandle << std::endl;
+        break;
+    }
   }
-
 }
 
 void StatisticOutputTest::outputField(fieldHandle_t fieldHandle, uint64_t data){
@@ -181,7 +243,29 @@ void StatisticOutputTest::outputField(fieldHandle_t fieldHandle, uint64_t data){
     std::get<arrow::UInt64Builder>(builders[fieldHandle]).Append(data);
   }
   else {
-    std::cerr << "error\t" << builders[fieldHandle].index() << ' ' << fieldHandle << std::endl;
+    switch(builders[fieldHandle].index()) {
+        case 1:
+           std::get<arrow::Int32Builder>(builders[fieldHandle]).Append(static_cast<std::int32_t>(data));
+        break;
+        case 2:
+           std::get<arrow::Int64Builder>(builders[fieldHandle]).Append(static_cast<std::int64_t>(data));
+        break;
+        case 3:
+           std::get<arrow::UInt32Builder>(builders[fieldHandle]).Append(static_cast<std::uint32_t>(data));
+        break;
+        case 4:
+           std::get<arrow::UInt64Builder>(builders[fieldHandle]).Append(static_cast<std::uint64_t>(data));
+        break;
+        case 5:
+           std::get<arrow::FloatBuilder>(builders[fieldHandle]).Append(static_cast<float>(data));
+        break;
+        case 6:
+           std::get<arrow::DoubleBuilder>(builders[fieldHandle]).Append(static_cast<double>(data));
+        break;
+        default:
+           std::cerr << "error\t" << builders[fieldHandle].index() << ' ' << fieldHandle << std::endl;
+        break;
+    }
   }
 }
 
@@ -190,7 +274,29 @@ void StatisticOutputTest::outputField(fieldHandle_t fieldHandle, float data){
     std::get<arrow::FloatBuilder>(builders[fieldHandle]).Append(data);
   }
   else {
-    std::cerr << "error\t" << builders[fieldHandle].index() << ' ' << fieldHandle << std::endl;
+    switch(builders[fieldHandle].index()) {
+        case 1:
+           std::get<arrow::Int32Builder>(builders[fieldHandle]).Append(static_cast<std::int32_t>(data));
+        break;
+        case 2:
+           std::get<arrow::Int64Builder>(builders[fieldHandle]).Append(static_cast<std::int64_t>(data));
+        break;
+        case 3:
+           std::get<arrow::UInt32Builder>(builders[fieldHandle]).Append(static_cast<std::uint32_t>(data));
+        break;
+        case 4:
+           std::get<arrow::UInt64Builder>(builders[fieldHandle]).Append(static_cast<std::uint64_t>(data));
+        break;
+        case 5:
+           std::get<arrow::FloatBuilder>(builders[fieldHandle]).Append(static_cast<float>(data));
+        break;
+        case 6:
+           std::get<arrow::DoubleBuilder>(builders[fieldHandle]).Append(static_cast<double>(data));
+        break;
+        default:
+           std::cerr << "error\t" << builders[fieldHandle].index() << ' ' << fieldHandle << std::endl;
+        break;
+    }
   }
 }
 
@@ -199,9 +305,30 @@ void StatisticOutputTest::outputField(fieldHandle_t fieldHandle, double data){
     std::get<arrow::DoubleBuilder>(builders[fieldHandle]).Append(data);
   }
   else {
-    std::cerr << "error\t" << builders[fieldHandle].index() << ' ' << fieldHandle << std::endl;
+    switch(builders[fieldHandle].index()) {
+        case 1:
+           std::get<arrow::Int32Builder>(builders[fieldHandle]).Append(static_cast<std::int32_t>(data));
+        break;
+        case 2:
+           std::get<arrow::Int64Builder>(builders[fieldHandle]).Append(static_cast<std::int64_t>(data));
+        break;
+        case 3:
+           std::get<arrow::UInt32Builder>(builders[fieldHandle]).Append(static_cast<std::uint32_t>(data));
+        break;
+        case 4:
+           std::get<arrow::UInt64Builder>(builders[fieldHandle]).Append(static_cast<std::uint64_t>(data));
+        break;
+        case 5:
+           std::get<arrow::FloatBuilder>(builders[fieldHandle]).Append(static_cast<float>(data));
+        break;
+        case 6:
+           std::get<arrow::DoubleBuilder>(builders[fieldHandle]).Append(static_cast<double>(data));
+        break;
+        default:
+           std::cerr << "error\t" << builders[fieldHandle].index() << ' ' << fieldHandle << std::endl;
+        break;
+    }
   }
-
 }
 
 };  // end SST::Statistics
