@@ -29,6 +29,7 @@ include_directories(SST_SRC ${SST_INSTALL_DIR})
 
 # SST Configuration Sanity Check
 find_program(SST sst)
+
 find_program(SST_CONFIG sst-config)
 if(NOT SST OR NOT SST_CONFIG)
   message(FATAL_ERROR "No SST binary or sst-config binary found in path")
@@ -41,6 +42,10 @@ execute_process(COMMAND sst-config --CXX
 )
 execute_process(COMMAND sst-config --ELEMENT_CXXFLAGS
                 OUTPUT_VARIABLE SST_CXXFLAGS
+                OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+execute_process(COMMAND sst-config --ELEMENT_LDFLAGS
+                OUTPUT_VARIABLE SST_LDFLAGS
                 OUTPUT_STRIP_TRAILING_WHITESPACE
 )
 
@@ -86,7 +91,7 @@ if(SSTDATA_ENABLE_TESTING)
 endif()
 
 #-- SST-Data Paths
-set(SSTDATA_INCLUDE_PATH "${CMAKE_CURRENT_SOURCE_PATH}/sstdata/include" CACHE PATH "SST-Data include path")
+set(SSTDATA_INCLUDE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/sstdata/include" CACHE PATH "SST-Data include path")
 
 #-- Arrow Dependency
 
