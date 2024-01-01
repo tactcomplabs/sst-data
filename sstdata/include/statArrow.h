@@ -1,51 +1,36 @@
-#pragma once
+//
+// _STATARROW_H_
+//
+// Copyright (C) 2017-2024 Tactical Computing Laboratories, LLC
+// All Rights Reserved
+// contact@tactcomplabs.com
+//
+// See LICENSE in the top level directory for licensing details
+//
+
 #ifndef STAT_ARROW_H_
 #define STAT_ARROW_H_
 
 #include <variant>
-#include <sst/core/sst_types.h>
-#include <sst/core/statapi/statoutput.h>
 
+// -- SST-DATA Headers
+#include "sstdata.h"
+
+// -- Arrow Headers
 #include <arrow/type.h>
 #include <arrow/api.h>
 
 namespace SST::Statistics{
 
-class SSTDataBase : public StatisticFieldsOutput{
-public:
-  SST_ELI_DECLARE_BASE(SST::Statistics::SSTDataBase);
-  SSTDataBase(Params& outputParameters)
-    : StatisticFieldsOutput(outputParameters){}
-protected:
-  bool checkOutputParameters()  = 0;
-  void printUsage() = 0;
-  void startOfSimulation() = 0;
-  void endOfSimulation() = 0;
-  void implStartOutputEntries(StatisticBase* statistic) = 0;
-  void implStopOutputEntries() = 0;
-
-  void outputField(fieldHandle_t fieldHandle, int32_t data) = 0;
-  void outputField(fieldHandle_t fieldHandle, uint32_t data) = 0;
-  void outputField(fieldHandle_t fieldHandle, int64_t data) = 0;
-  void outputField(fieldHandle_t fieldHandle, uint64_t data) = 0;
-  void outputField(fieldHandle_t fieldHandle, float data) = 0;
-  void outputField(fieldHandle_t fieldHandle, double data) = 0;
-
-  virtual bool acceptsGroups() const override = 0;
-
-  SSTDataBase() { ; }
-
-};
-
-class StatisticOutputTest : public SSTDataBase{
+class StatisticOutputArrow : public SSTDataBase{
 public:
   SST_ELI_REGISTER_DERIVED(
     SSTDataBase,
-    StatisticOutputTest,
+    StatisticOutputArrow,
     "sstdata",
-    "statoutputtest",
+    "statarrow",
     SST_ELI_ELEMENT_VERSION(1,0,0),
-    "Output test"
+    "Apache Arrow Statistics Output"
   )
 
   StatisticOutputTest(Params& outputParameters);

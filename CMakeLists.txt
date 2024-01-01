@@ -1,7 +1,7 @@
 #
 # sst-data CMake
 #
-# Copyright (C) 2017-2023 Tactical Computing Laboratories, LLC
+# Copyright (C) 2017-2024 Tactical Computing Laboratories, LLC
 # All Rights Reserved
 # contact@tactcomplabs.com
 # See LICENSE in the top level directory for licensing details
@@ -63,6 +63,9 @@ set(CMAKE_CXX_FLAGS "-std=c++17 ${FP_MODE_FLAG} -O2 -Wall -Wextra ${WERROR_FLAG}
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -Wall ${SSTDATA_COMPILER_MACROS}")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -Wall ${SSTDATA_COMPILER_MACROS}")
 
+#-- Target Options
+option(SSTDATA_ENABLE_ARROW "Enable SSTData Arrow Backend" ON)
+
 #-- Documentation Options
 option(BUILD_DOCUMENTATION "Create and install the doxygen-ized API documentation (requires Doxygen)" ${DOXYGEN_FOUND})
 
@@ -72,7 +75,7 @@ if(BUILD_DOCUMENTATION)
     message(FATAL_ERROR "Doxygen is required to build the documentation.")
   endif()
 
-  set(doxyfile ${CMAKE_CURRENT_SOURCE_DIR}/doxygen/RevCPU.conf)
+  set(doxyfile ${CMAKE_CURRENT_SOURCE_DIR}/doxygen/sstdata.conf)
 
   add_custom_target(doc
     COMMAND ${DOXYGEN_EXECUTABLE} ${doxyfile}

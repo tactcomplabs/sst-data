@@ -1,3 +1,13 @@
+//
+// _STATARROW_CC_
+//
+// Copyright (C) 2017-2024 Tactical Computing Laboratories, LLC
+// All Rights Reserved
+// contact@tactcomplabs.com
+//
+// See LICENSE in the top level directory for licensing details
+//
+
 #include <cstring>
 #include <sst/core/sst_config.h>
 #include <sst/core/stringize.h>
@@ -5,35 +15,32 @@
 
 namespace SST::Statistics{
 
-StatisticOutputTest::StatisticOutputTest(Params& outputParameters)
+StatisticOutputArrow::StatisticOutputArrow(Params& outputParameters)
   : SSTDataBase(outputParameters), batches(), builders(), schemas() {
-  //m_useCompression = outputParameters.find<bool>("compressed");
-  //Announce this output object's name
-  //Output& out      = Simulation_impl::getSimulationOutput();
-  //Output out("", 0, 0, Output::STDOUT);
-  //std::cout << "BOGUS" << std::endl;
-  //out.verbose(CALL_INFO, 1, 0, " : StatisticOutputTest enabled...\n");
-  setStatisticOutputName("StatisticOutputTest");
+  setStatisticOutputName("StatisticOutputArrow");
 }
 
-bool StatisticOutputTest::checkOutputParameters(){
+bool StatisticOutputArrow::checkOutputParameters(){
   return true;
 }
 
-void StatisticOutputTest::printUsage(){
+void StatisticOutputArrow::printUsage(){
   Output out("", 0, 0, Output::STDOUT);
   out.output(" : Usage - Sends all statistic output compilation test.\n");
 }
 
-void StatisticOutputTest::startOfSimulation(){
+void StatisticOutputArrow::startOfSimulation(){
   std::cout << "startOfSimulation" << std::endl;
 }
 
-void StatisticOutputTest::endOfSimulation(){
+void StatisticOutputArrow::endOfSimulation(){
   std::cout << "endOfSimulation" << std::endl;
 }
 
-static bool fieldTypeToArrowField(std::vector<StatisticOutputTest::ArrowBuilders> & builders, std::vector<std::shared_ptr<arrow::Field>> & fields, std::string const& field_str, const char * ft_cstr) {
+static bool fieldTypeToArrowField(std::vector<StatisticOutputArrow::ArrowBuilders> & builders,
+                                  std::vector<std::shared_ptr<arrow::Field>> & fields,
+                                  std::string const& field_str,
+                                  const char * ft_cstr) {
     if(std::strncmp(ft_cstr, "int32_t", 7) == 0) {
         fields.push_back(arrow::field(field_str, arrow::int32()));
         builders.push_back(arrow::Int32Builder{});
@@ -74,7 +81,7 @@ static bool fieldTypeToArrowField(std::vector<StatisticOutputTest::ArrowBuilders
 //
 // https://arrow.apache.org/cookbook/cpp/create.html#create-arrays-from-standard-c
 //
-void StatisticOutputTest::implStartOutputEntries(StatisticBase* statistic){
+void StatisticOutputArrow::implStartOutputEntries(StatisticBase* statistic){
 
   const std::string m_currentComponentName  = statistic->getCompName();
   const std::string m_currentStatisticName  = statistic->getStatName();
@@ -99,14 +106,17 @@ void StatisticOutputTest::implStartOutputEntries(StatisticBase* statistic){
     val = *itr;
     ft = val->getFieldType();
     StatisticFieldTypeBase const* ptr = StatisticFieldTypeBase::getField(ft);
-    rv = fieldTypeToArrowField(builders, fields, val->getFieldName(), ptr->fieldName());
+    rv = fieldTypeToArrowField(builders,
+                               fields,
+                               val->getFieldName(),
+                               ptr->fieldName());
     //std::cout << "***\t" << val->getStatName() << ' ' << val->getFieldName() << ' ' << val->getFieldUniqueName() << ' ' << ptr->fieldName() << ' ' << ptr->shortName() << std::endl;
   }
   
   schemas.emplace_back(arrow::schema(fields));
 }
 
-void StatisticOutputTest::implStopOutputEntries() {
+void StatisticOutputArrow::implStopOutputEntries() {
   std::cout << "implStopOutputEntries" << std::endl;
 
   std::vector<std::shared_ptr<arrow::Array>> arrays;
@@ -144,7 +154,7 @@ void StatisticOutputTest::implStopOutputEntries() {
   builders.clear();
 }
 
-void StatisticOutputTest::outputField(fieldHandle_t fieldHandle, int32_t data){
+void StatisticOutputArrow::outputField(fieldHandle_t fieldHandle, int32_t data){
   if(std::holds_alternative<arrow::Int32Builder>(builders[fieldHandle])) {
     std::get<arrow::Int32Builder>(builders[fieldHandle]).Append(data);
   }
@@ -175,7 +185,7 @@ void StatisticOutputTest::outputField(fieldHandle_t fieldHandle, int32_t data){
   }
 }
 
-void StatisticOutputTest::outputField(fieldHandle_t fieldHandle, uint32_t data){
+void StatisticOutputArrow::outputField(fieldHandle_t fieldHandle, uint32_t data){
   if(std::holds_alternative<arrow::UInt32Builder>(builders[fieldHandle])) {
     std::get<arrow::UInt32Builder>(builders[fieldHandle]).Append(data);
   }
@@ -206,7 +216,7 @@ void StatisticOutputTest::outputField(fieldHandle_t fieldHandle, uint32_t data){
   }
 }
 
-void StatisticOutputTest::outputField(fieldHandle_t fieldHandle, int64_t data){
+void StatisticOutputArrow::outputField(fieldHandle_t fieldHandle, int64_t data){
   if(std::holds_alternative<arrow::Int64Builder>(builders[fieldHandle])) {
     std::get<arrow::Int64Builder>(builders[fieldHandle]).Append(data);
   }
@@ -237,7 +247,7 @@ void StatisticOutputTest::outputField(fieldHandle_t fieldHandle, int64_t data){
   }
 }
 
-void StatisticOutputTest::outputField(fieldHandle_t fieldHandle, uint64_t data){
+void StatisticOutputArrow::outputField(fieldHandle_t fieldHandle, uint64_t data){
   if(std::holds_alternative<arrow::UInt64Builder>(builders[fieldHandle])) {
     std::get<arrow::UInt64Builder>(builders[fieldHandle]).Append(data);
   }
@@ -268,7 +278,7 @@ void StatisticOutputTest::outputField(fieldHandle_t fieldHandle, uint64_t data){
   }
 }
 
-void StatisticOutputTest::outputField(fieldHandle_t fieldHandle, float data){
+void StatisticOutputArrow::outputField(fieldHandle_t fieldHandle, float data){
   if(std::holds_alternative<arrow::FloatBuilder>(builders[fieldHandle])) {
     std::get<arrow::FloatBuilder>(builders[fieldHandle]).Append(data);
   }
@@ -299,7 +309,7 @@ void StatisticOutputTest::outputField(fieldHandle_t fieldHandle, float data){
   }
 }
 
-void StatisticOutputTest::outputField(fieldHandle_t fieldHandle, double data){
+void StatisticOutputArrow::outputField(fieldHandle_t fieldHandle, double data){
   if(std::holds_alternative<arrow::DoubleBuilder>(builders[fieldHandle])) {
     std::get<arrow::DoubleBuilder>(builders[fieldHandle]).Append(data);
   }

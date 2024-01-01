@@ -14,6 +14,6 @@ set(SSTDataHdrs
 install(DIRECTORY "."
         DESTINATION "include/sstdata"
         FILES_MATCHING
-        PATTERN "*.h")
+        PATTERN "sstdata.h")
 
 # EOF
