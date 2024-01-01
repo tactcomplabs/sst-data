@@ -97,10 +97,11 @@ endif()
 set(SSTDATA_INCLUDE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/sstdata/include" CACHE PATH "SST-Data include path")
 
 #-- Arrow Dependency
-
-find_package(Arrow REQUIRED)
-if(NOT Arrow_FOUND)
-  message(FATAL_ERROR "Arrow not found, find $CMAKE_INSTALL_PREFIX for Arrow")
+if(SSTDATA_ENABLE_ARROW)
+  find_package(Arrow REQUIRED)
+  if(NOT Arrow_FOUND)
+    message(FATAL_ERROR "Arrow not found, find $CMAKE_INSTALL_PREFIX for Arrow")
+  endif()
 endif()
 
 #-- Custom Commands

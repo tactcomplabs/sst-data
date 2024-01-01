@@ -7,14 +7,24 @@
 # See LICENSE in the top level directory for licensing details
 #
 
+#-- SST ARROW BUILD OPTIONS
 if(SSTDATA_ENABLE_ARROW)
-  add_library(sstarrow SHARED
-    statArrow.cc
-  )
+  set(statArrowSrcs statArrow.cc)
+else()
+  set(statArrowSrcs "")
+endif()
 
-  target_include_directories(sstarrow PRIVATE Arrow::arrow_shared ${SSTDATA_INCLUDE_PATH} ${SST_INSTALL_DIR}/include)
-  target_link_directories(sstarrow PRIVATE ${SST_INSTALL_DIR}/lib ${SST_INSTALL_DIR}/lib/sst-elements-library)
-  target_link_libraries(sstarrow PRIVATE Arrow::arrow_shared ${SST_INSTALL_DIR}/lib/sstcore ${SST_LDFLAGS})
+#-- SST DATA TARGET
+add_library(sstdata SHARED ${statArrowSrcs})
+
+#-- SST ARROW LINK OPTIONS
+if(SSTDATA_ENABLE_ARROW)
+  target_include_directories(sstdata PRIVATE Arrow::arrow_shared
+    ${SSTDATA_INCLUDE_PATH} ${SST_INSTALL_DIR}/include)
+  target_link_directories(sstdata PRIVATE ${SST_INSTALL_DIR}/lib
+    ${SST_INSTALL_DIR}/lib/sst-elements-library)
+  target_link_libraries(sstdata PRIVATE Arrow::arrow_shared
+    ${SST_INSTALL_DIR}/lib/sstcore ${SST_LDFLAGS})
 endif()
 
 # EOF
