@@ -14,8 +14,17 @@ else()
   set(statArrowSrcs "")
 endif()
 
+#-- SST SQLLITE3 BUILD OPTIONS
+if(SSTDATA_ENABLE_SQLLITE)
+  set(statSQLLiteSrcs statSQLLite.cc)
+else()
+  set(statSQLLiteSrcs "")
+endif()
+
 #-- SST DATA TARGET
 add_library(sstdata SHARED ${statArrowSrcs})
+
+target_include_directories(sstdata PRIVATE ${SSTDATA_INCLUDE_PATH})
 
 #-- SST ARROW LINK OPTIONS
 if(SSTDATA_ENABLE_ARROW)
@@ -25,6 +34,12 @@ if(SSTDATA_ENABLE_ARROW)
     ${SST_INSTALL_DIR}/lib/sst-elements-library)
   target_link_libraries(sstdata PRIVATE Arrow::arrow_shared
     ${SST_INSTALL_DIR}/lib/sstcore ${SST_LDFLAGS})
+endif()
+
+#-- SST SQLLITE3 LINK OPTIONS
+if(SSTDATA_ENABLE_SQLLITE)
+  target_include_directories(sstdata PRIVATE ${SQLITE3_INCLUDE_DIRS})
+  target_link_libraries(sstdata PRIVATE ${SQLITE3_LIBRARIES})
 endif()
 
 # EOF

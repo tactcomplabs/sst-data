@@ -1,5 +1,5 @@
 //
-// _STATARROW_H_
+// _STATSQLLITE_H_
 //
 // Copyright (C) 2017-2024 Tactical Computing Laboratories, LLC
 // All Rights Reserved
@@ -8,12 +8,10 @@
 // See LICENSE in the top level directory for licensing details
 //
 
-#ifndef STAT_ARROW_H_
-#define STAT_ARROW_H_
+#ifndef STAT_SQLLITE_H_
+#define STAT_SQLLITE_H_
 
-// -- CXX Headers
 #include <variant>
-#include <cstring>
 
 // -- SST-DATA Headers
 #include "sstdata.h"
@@ -24,29 +22,18 @@
 
 namespace SST::Statistics{
 
-class StatisticOutputArrow : public SSTDataBase{
+class StatisticOutputSQLLite : public SSTDataBase{
 public:
   SST_ELI_REGISTER_DERIVED(
     SSTDataBase,
-    StatisticOutputArrow,
+    StatisticOutputSQLLite,
     "sstdata",
-    "statarrow",
+    "statsqllite",
     SST_ELI_ELEMENT_VERSION(1,0,0),
-    "Apache Arrow Statistics Output"
+    "SQLLite3 Statistics Output"
   )
 
-  StatisticOutputArrow(Params& outputParameters);
-
-  using ArrowBuilders = std::variant<
-    std::monostate,
-    arrow::Int32Builder,
-    arrow::Int64Builder,
-    arrow::UInt32Builder,
-    arrow::UInt64Builder,
-    arrow::FloatBuilder,
-    arrow::DoubleBuilder,
-    arrow::NullBuilder
-  >;
+  StatisticOutputSQLLite(Params& outputParameters);
 
 protected:
   bool checkOutputParameters() override;
@@ -70,12 +57,9 @@ protected:
 
   bool acceptsGroups() const override { return true; }
 
-  StatisticOutputArrow()  : SSTDataBase() { ; }
+  StatisticOutputSQLLite()  : SSTDataBase() { ; }
 
 private:
-  std::vector<std::shared_ptr<arrow::RecordBatch>> batches;
-  std::vector<ArrowBuilders> builders;
-  std::vector<std::shared_ptr<arrow::Schema>> schemas;
 
 };  // end StatOutputTest
 };  // end SST::Statistics

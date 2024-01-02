@@ -63,8 +63,30 @@ set(CMAKE_CXX_FLAGS "-std=c++17 ${FP_MODE_FLAG} -O2 -Wall -Wextra ${WERROR_FLAG}
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -Wall ${SSTDATA_COMPILER_MACROS}")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -Wall ${SSTDATA_COMPILER_MACROS}")
 
-#-- Target Options
+#-- SST-Data Paths
+set(SSTDATA_INCLUDE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/sstdata/include" CACHE PATH "SST-Data include path")
+
+#---------------------------------------------
+# TARGET OPTIONS
+#---------------------------------------------
 option(SSTDATA_ENABLE_ARROW "Enable SSTData Arrow Backend" ON)
+option(SSTDATA_ENABLE_SQLLITE "Enable SSTData SQLLite Backend" ON)
+
+#-- Arrow Dependency
+if(SSTDATA_ENABLE_ARROW)
+  find_package(Arrow REQUIRED)
+  if(NOT Arrow_FOUND)
+    message(FATAL_ERROR "Arrow not found!")
+  endif()
+endif()
+
+#-- SQLLite3 Dependency
+if(SSTDATA_ENABLE_SQLLITE)
+  find_package (SQLite3)
+  if(NOT SQLITE3_FOUND)
+    message(FATAL_ERROR "SQLLite3 not found!")
+  endif()
+endif()
 
 #-- Documentation Options
 option(BUILD_DOCUMENTATION "Create and install the doxygen-ized API documentation (requires Doxygen)" ${DOXYGEN_FOUND})
@@ -91,17 +113,6 @@ endif()
 option(SSTDATA_ENABLE_TESTING "Enable Testing" ON)
 if(SSTDATA_ENABLE_TESTING)
   enable_testing()
-endif()
-
-#-- SST-Data Paths
-set(SSTDATA_INCLUDE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/sstdata/include" CACHE PATH "SST-Data include path")
-
-#-- Arrow Dependency
-if(SSTDATA_ENABLE_ARROW)
-  find_package(Arrow REQUIRED)
-  if(NOT Arrow_FOUND)
-    message(FATAL_ERROR "Arrow not found, find $CMAKE_INSTALL_PREFIX for Arrow")
-  endif()
 endif()
 
 #-- Custom Commands

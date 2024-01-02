@@ -8,9 +8,6 @@
 // See LICENSE in the top level directory for licensing details
 //
 
-#include <cstring>
-#include <sst/core/sst_config.h>
-#include <sst/core/stringize.h>
 #include "statArrow.h"
 
 namespace SST::Statistics{
