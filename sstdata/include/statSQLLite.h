@@ -8,17 +8,16 @@
 // See LICENSE in the top level directory for licensing details
 //
 
-#ifndef STAT_SQLLITE_H_
-#define STAT_SQLLITE_H_
+#ifndef _STAT_SQLLITE_H_
+#define _STAT_SQLLITE_H_
 
 #include <variant>
 
 // -- SST-DATA Headers
 #include "sstdata.h"
 
-// -- Arrow Headers
-#include <arrow/type.h>
-#include <arrow/api.h>
+// -- SQLLITE3 Headers
+#include "sqlite3.h"
 
 namespace SST::Statistics{
 

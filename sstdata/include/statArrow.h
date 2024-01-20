@@ -8,8 +8,8 @@
 // See LICENSE in the top level directory for licensing details
 //
 
-#ifndef STAT_ARROW_H_
-#define STAT_ARROW_H_
+#ifndef _STAT_ARROW_H_
+#define _STAT_ARROW_H_
 
 // -- CXX Headers
 #include <variant>

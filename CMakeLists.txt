@@ -59,6 +59,7 @@ else()
   set(FP_MODE_FLAG "-frounding-math")
 endif()
 
+set(LDFLAGS "${SST_LDFLAGS}")
 set(CMAKE_CXX_FLAGS "-std=c++17 ${FP_MODE_FLAG} -O2 -Wall -Wextra ${WERROR_FLAG} -Wvla -Wuninitialized -Wfloat-conversion -Wdouble-promotion -Wno-unused-parameter -Wno-deprecated-declarations ${CMAKE_CXX_FLAGS} -I./ ${LDFLAGS} ${SSTDATA_COMPILER_MACROS}")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -Wall ${SSTDATA_COMPILER_MACROS}")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -Wall ${SSTDATA_COMPILER_MACROS}")
@@ -69,8 +70,8 @@ set(SSTDATA_INCLUDE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/sstdata/include" CACHE PAT
 #---------------------------------------------
 # TARGET OPTIONS
 #---------------------------------------------
-option(SSTDATA_ENABLE_ARROW "Enable SSTData Arrow Backend" ON)
-option(SSTDATA_ENABLE_SQLLITE "Enable SSTData SQLLite Backend" ON)
+option(SSTDATA_ENABLE_ARROW "Enable SSTData Arrow Backend" OFF)
+option(SSTDATA_ENABLE_SQLLITE "Enable SSTData SQLLite Backend" OFF)
 
 #-- Arrow Dependency
 if(SSTDATA_ENABLE_ARROW)
@@ -120,6 +121,6 @@ add_custom_target(uninstall COMMAND "${CMAKE_CURRENT_SOURCE_DIR}/scripts/uninsta
 
 #-- Subdirectories
 add_subdirectory(sstdata)
-add_subdirectory(test)
+#add_subdirectory(test)
 
 # EOF

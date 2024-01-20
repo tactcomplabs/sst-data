@@ -22,9 +22,10 @@ else()
 endif()
 
 #-- SST DATA TARGET
-add_library(sstdata SHARED ${statArrowSrcs})
+add_library(sstdata SHARED ${statArrowSrcs} ${statSQLLiteSrcs})
 
 target_include_directories(sstdata PRIVATE ${SSTDATA_INCLUDE_PATH})
+target_include_directories(sstdata PRIVATE ${SST_INCLUDE_DIR})
 
 #-- SST ARROW LINK OPTIONS
 if(SSTDATA_ENABLE_ARROW)

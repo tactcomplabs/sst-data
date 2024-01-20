@@ -13,7 +13,7 @@
 
 #include <sst/core/sst_types.h>
 #include <sst/core/statapi/statoutput.h>
-#include <sst/core/sst_config.h>
+//#include <sst/core/sst_config.h>
 #include <sst/core/stringize.h>
 
 namespace SST::Statistics{
@@ -28,40 +28,40 @@ public:
 
 protected:
   /// SSTDataBase: pure virtual checkOutputParameters
-  bool checkOutputParameters()  = 0;
+  bool checkOutputParameters()  override = 0;
 
   /// SSTDataBase: pure virtual printUsage
-  void printUsage() = 0;
+  void printUsage() override = 0;
 
   /// SSTDataBase: pure virtual startOfSimulation
-  void startOfSimulation() = 0;
+  void startOfSimulation() override = 0;
 
   /// SSTDataBase: pure virtual endOfSimulation
-  void endOfSimulation() = 0;
+  void endOfSimulation() override = 0;
 
   /// SSTDataBase: pure virtual implStartOutputEntries
-  void implStartOutputEntries(StatisticBase* statistic) = 0;
+  void implStartOutputEntries(StatisticBase* statistic) override = 0;
 
   /// SSTDataBase: pure virtual implStopOutputEntries
-  void implStopOutputEntries() = 0;
+  void implStopOutputEntries() override = 0;
 
   /// SSTDataBase: pure virtual outputField
-  void outputField(fieldHandle_t fieldHandle, int32_t data) = 0;
+  void outputField(fieldHandle_t fieldHandle, int32_t data) override = 0;
 
   /// SSTDataBase: pure virtual outputField
-  void outputField(fieldHandle_t fieldHandle, uint32_t data) = 0;
+  void outputField(fieldHandle_t fieldHandle, uint32_t data) override = 0;
 
   /// SSTDataBase: pure virtual outputField
-  void outputField(fieldHandle_t fieldHandle, int64_t data) = 0;
+  void outputField(fieldHandle_t fieldHandle, int64_t data) override = 0;
 
   /// SSTDataBase: pure virtual outputField
-  void outputField(fieldHandle_t fieldHandle, uint64_t data) = 0;
+  void outputField(fieldHandle_t fieldHandle, uint64_t data) override = 0;
 
   /// SSTDataBase: pure virtual outputField
-  void outputField(fieldHandle_t fieldHandle, float data) = 0;
+  void outputField(fieldHandle_t fieldHandle, float data) override = 0;
 
   /// SSTDataBase: pure virtual outputField
-  void outputField(fieldHandle_t fieldHandle, double data) = 0;
+  void outputField(fieldHandle_t fieldHandle, double data) override = 0;
 
   /// SSTDataBase: pure virtual acceptsGroups
   virtual bool acceptsGroups() const override = 0;
