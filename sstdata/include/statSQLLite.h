@@ -32,6 +32,10 @@ public:
     "SQLLite3 Statistics Output"
   )
 
+  SST_ELI_DOCUMENT_PARAMS(
+    { "dbfile",     "database output file",     "db.sql"},
+  )
+
   StatisticOutputSQLLite(Params& outputParameters);
 
 protected:
@@ -59,6 +63,19 @@ protected:
   StatisticOutputSQLLite()  : SSTDataBase() { ; }
 
 private:
+
+  // private methods
+  // parameters
+  std::string dbfile;                   ///< database file
+
+  // private data members
+  Output out;                           ///< sst output handler
+  sqlite3 *ppDb;                        ///< database handler
+
+  std::string curComponentName;         ///< component name
+  std::string curStatisticName;         ///< statistic name
+  std::string curStatisticSubId;        ///< statistic subid
+  std::string curStatisticType;         ///< statistic type
 
 };  // end StatOutputTest
 };  // end SST::Statistics

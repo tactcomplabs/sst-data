@@ -13,7 +13,6 @@
 
 #include <sst/core/sst_types.h>
 #include <sst/core/statapi/statoutput.h>
-//#include <sst/core/sst_config.h>
 #include <sst/core/stringize.h>
 
 namespace SST::Statistics{
