@@ -30,7 +30,7 @@ bool StatisticOutputSQLLite::checkOutputParameters(){
   if ( true == foundKey ) { return false; }
 
   // read all the parameters
-  dbfile = getOutputParameters().find<std::string>("dbfile", "db.sql");
+  dbfile = getOutputParameters().find<std::string>("dbfile", "Statistics.sql");
 
   int err = sqlite3_open( dbfile.c_str(), &ppDb );
   if( err != SQLITE_OK ){
@@ -43,6 +43,8 @@ bool StatisticOutputSQLLite::checkOutputParameters(){
 
 void StatisticOutputSQLLite::printUsage(){
   out.output(" : Usage - Sends all statistic output compilation test.\n");
+  out.output(" : help = Force Statistic Output to display usage\n");
+  out.output(" : dfile = </path/to/Statistics.sql> - Database output file; default = ./db.sql\n");
 }
 
 void StatisticOutputSQLLite::startOfSimulation(){
@@ -52,12 +54,15 @@ void StatisticOutputSQLLite::startOfSimulation(){
                 dbfile.c_str(), err );
   }
 
-  std::string sql =   "CREATE TABLE STATS( COMPNAME TEXT NOT NULL, STATNAME TEXT NOT NULL, STATSUBID TEXT NOT NULL, TYPE TEXT NOT NULL, VALUE TEXT NOT NULL);";
+  const std::string sql =
+    "CREATE TABLE IF NOT EXISTS STATS( ComponentName TEXT NOT NULL, StatisticName TEXT NOT NULL, StatisticSubId TEXT, StatisticType TEXT NOT NULL, SimTime INTEGER, Rank INTEGER, Sum.u64 INTEGER, SumSQ.u64 INTEGER, Count.u64 INTEGER, Min.u64 INTEGER, Max.u64 INTEGER);";
   err = sqlite3_exec(ppDb, sql.c_str(), NULL, NULL, NULL);
 }
 
 void StatisticOutputSQLLite::endOfSimulation(){
-  sqlite3_close(ppDb);
+  if( ppDb ){
+    sqlite3_close(ppDb);
+  }
 }
 
 void StatisticOutputSQLLite::implStartOutputEntries(StatisticBase* statistic){
