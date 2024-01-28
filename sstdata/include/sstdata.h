@@ -15,6 +15,10 @@
 #include <sst/core/statapi/statoutput.h>
 #include <sst/core/stringize.h>
 
+#ifdef SSTDATA_MPI
+#include <mpi.h>
+#endif
+
 namespace SST::Statistics{
 
 class SSTDataBase : public StatisticFieldsOutput{
@@ -23,7 +27,17 @@ public:
 
   /// SSTDataBase: constructor
   SSTDataBase(Params& outputParameters)
-    : StatisticFieldsOutput(outputParameters){}
+    : StatisticFieldsOutput(outputParameters), isMPI(false),
+      rank(0), numRanks(1){
+#ifdef SSTDATA_MPI
+    int isInit  = -1;
+    MPI_Initialized(&isInit);
+    if( isInit ){
+      MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+      MPI_Comm_rank(MPI_COMM_WORLD, &numRanks);
+    }
+#endif
+  }
 
 protected:
   /// SSTDataBase: pure virtual checkOutputParameters
@@ -67,6 +81,11 @@ protected:
 
   /// SSTDataBase: constructor
   SSTDataBase() { ; }
+
+  // Protected data members
+  bool isMPI;
+  int rank;
+  int numRanks;
 
 };  // class SSTDataBase
 };  // nameapce SST::Statistics

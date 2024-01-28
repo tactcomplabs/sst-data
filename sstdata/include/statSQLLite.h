@@ -65,6 +65,10 @@ protected:
 private:
 
   // private methods
+
+  /// StatisticOutputSQLLite: converts an SST FieldType to an SQL type
+  std::string fieldToSQLType(std::string Type);
+
   // parameters
   std::string dbfile;                   ///< database file
 
@@ -72,6 +76,7 @@ private:
   Output out;                           ///< sst output handler
   sqlite3 *ppDb;                        ///< database handler
 
+  std::vector<std::string> outBuf;      ///< output buffer
   std::string curComponentName;         ///< component name
   std::string curStatisticName;         ///< statistic name
   std::string curStatisticSubId;        ///< statistic subid

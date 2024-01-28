@@ -44,7 +44,7 @@ bool StatisticOutputSQLLite::checkOutputParameters(){
 void StatisticOutputSQLLite::printUsage(){
   out.output(" : Usage - Sends all statistic output compilation test.\n");
   out.output(" : help = Force Statistic Output to display usage\n");
-  out.output(" : dfile = </path/to/Statistics.sql> - Database output file; default = ./db.sql\n");
+  out.output(" : dbfile = </path/to/Statistics.sql> - Database output file; default = ./db.sql\n");
 }
 
 void StatisticOutputSQLLite::startOfSimulation(){
@@ -54,9 +54,49 @@ void StatisticOutputSQLLite::startOfSimulation(){
                 dbfile.c_str(), err );
   }
 
-  const std::string sql =
-    "CREATE TABLE IF NOT EXISTS STATS( ComponentName TEXT NOT NULL, StatisticName TEXT NOT NULL, StatisticSubId TEXT, StatisticType TEXT NOT NULL, SimTime INTEGER, Rank INTEGER, Sum.u64 INTEGER, SumSQ.u64 INTEGER, Count.u64 INTEGER, Min.u64 INTEGER, Max.u64 INTEGER);";
+  // init the output buffer as string objects
+  for( auto it = getFieldInfoArray().begin();
+       it != getFieldInfoArray().end(); it++ ){
+    outBuf.push_back(std::string(""));
+  }
+
+  // build the table creation sql
+  std::string sql =
+    "CREATE TABLE IF NOT EXISTS STATS." +
+    std::to_string(rank) +
+    "( ComponentName TEXT NOT NULL, StatisticName TEXT NOT NULL, StatisticSubId TEXT, StatisticType TEXT NOT NULL,";
+
+  StatisticFieldInfo* statField = nullptr;
+  auto it = getFieldInfoArray().begin();
+  while( it != getFieldInfoArray().end() ){
+    statField = *it;
+    sql += statField->getFieldName();
+    sql += ".";
+    sql += getFieldTypeShortName(statField->getFieldType());
+    sql += " ";
+    sql += fieldToSQLType(getFieldTypeShortName(statField->getFieldType()));
+
+    it++;
+    if( it != getFieldInfoArray().end() ){
+      sql += ",";
+    }else{
+      sql += ");";
+    }
+  }
   err = sqlite3_exec(ppDb, sql.c_str(), NULL, NULL, NULL);
+}
+
+std::string StatisticOutputSQLLite::fieldToSQLType(std::string Type){
+  if( (Type == "u64") ||
+      (Type == "u32") ||
+      (Type == "s64") ||
+      (Type == "s32")){
+    return std::string("INTEGER");
+  }else if( (Type == "float") ||
+            (Type == "double") ){
+    return std::string("REAL");
+  }
+  return std::string("TEXT");
 }
 
 void StatisticOutputSQLLite::endOfSimulation(){
@@ -71,6 +111,10 @@ void StatisticOutputSQLLite::implStartOutputEntries(StatisticBase* statistic){
   curStatisticName  = statistic->getStatName();
   curStatisticSubId = statistic->getStatSubId();
   curStatisticType  = statistic->getStatTypeName();
+
+  for( size_t i = 0; i < getFieldInfoArray().size(); i++ ) {
+    outBuf[i] = "0";
+  }
 }
 
 void StatisticOutputSQLLite::implStopOutputEntries(){
@@ -78,26 +122,32 @@ void StatisticOutputSQLLite::implStopOutputEntries(){
 
 void StatisticOutputSQLLite::outputField(fieldHandle_t fieldHandle,
                                          int32_t data){
+  outBuf[fieldHandle] = format_string("%" PRId32, data);
 }
 
 void StatisticOutputSQLLite::outputField(fieldHandle_t fieldHandle,
                                          uint32_t data){
+  outBuf[fieldHandle] = format_string("%" PRIu32, data);
 }
 
 void StatisticOutputSQLLite::outputField(fieldHandle_t fieldHandle,
                                          int64_t data){
+  outBuf[fieldHandle] = format_string("%" PRId64, data);
 }
 
 void StatisticOutputSQLLite::outputField(fieldHandle_t fieldHandle,
                                          uint64_t data){
+  outBuf[fieldHandle] = format_string("%" PRIu64, data);
 }
 
 void StatisticOutputSQLLite::outputField(fieldHandle_t fieldHandle,
                                          float data){
+  outBuf[fieldHandle] = format_string("%f", data);
 }
 
 void StatisticOutputSQLLite::outputField(fieldHandle_t fieldHandle,
                                          double data){
+  outBuf[fieldHandle] = format_string("%f", data);
 }
 
 };  // end SST::Statistics

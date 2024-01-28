@@ -72,6 +72,17 @@ set(SSTDATA_INCLUDE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/sstdata/include" CACHE PAT
 #---------------------------------------------
 option(SSTDATA_ENABLE_ARROW "Enable SSTData Arrow Backend" OFF)
 option(SSTDATA_ENABLE_SQLLITE "Enable SSTData SQLLite Backend" OFF)
+option(SSTDATA_ENABLE_MPI "Enable MPI Support" OFF)
+
+if(SSTDATA_ENABLE_MPI)
+  find_package(MPI)
+  if(MPI_FOUND)
+    add_definitions(-DSSTDATA_MPI=1)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I${MPI_CXX_INCLUDE_DIRS}")
+    message(STATUS "[MPI] Found MPI CXX at ${MPI_CXX_COMPILER}")
+    message(STATUS "[MPI] Setting CMAKE_CXX_FLAGS = ${CMAKE_CXX_FLAGS}")
+  endif()
+endif()
 
 #-- Arrow Dependency
 if(SSTDATA_ENABLE_ARROW)
