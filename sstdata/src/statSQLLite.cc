@@ -142,7 +142,7 @@ void StatisticOutputSQLLite::outputField(fieldHandle_t fieldHandle,
 
 void StatisticOutputSQLLite::outputField(fieldHandle_t fieldHandle,
                                          float data){
-  outBuf[fieldHandle] = format_string("%f", data);
+  outBuf[fieldHandle] = format_string("%f", (double)(data));
 }
 
 void StatisticOutputSQLLite::outputField(fieldHandle_t fieldHandle,
