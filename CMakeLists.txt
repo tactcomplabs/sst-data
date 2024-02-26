@@ -94,7 +94,9 @@ endif()
 
 #-- SQLLite3 Dependency
 if(SSTDATA_ENABLE_SQLLITE)
-  find_package (SQLite3)
+  find_package(SQLite3)
+  message(STATUS "[SQLITE3] Found header path at ${SQLite3_INCLUDE_DIRS}")
+  message(STATUS "[SQLITE3] Found libraries at ${SQLite3_LIBRARIES}")
   if(NOT SQLITE3_FOUND)
     message(FATAL_ERROR "SQLLite3 not found!")
   endif()

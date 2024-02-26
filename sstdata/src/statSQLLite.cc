@@ -62,16 +62,16 @@ void StatisticOutputSQLLite::startOfSimulation(){
 
   // build the table creation sql
   std::string sql =
-    "CREATE TABLE IF NOT EXISTS STATS." +
+    "CREATE TABLE IF NOT EXISTS STATS_" +
     std::to_string(rank) +
-    "( ComponentName TEXT NOT NULL, StatisticName TEXT NOT NULL, StatisticSubId TEXT, StatisticType TEXT NOT NULL,";
+    " ( ComponentName TEXT NOT NULL, StatisticName TEXT NOT NULL, StatisticSubId TEXT, StatisticType TEXT NOT NULL,";
 
   StatisticFieldInfo* statField = nullptr;
   auto it = getFieldInfoArray().begin();
   while( it != getFieldInfoArray().end() ){
     statField = *it;
     sql += statField->getFieldName();
-    sql += ".";
+    sql += "_";
     sql += getFieldTypeShortName(statField->getFieldType());
     sql += " ";
     sql += fieldToSQLType(getFieldTypeShortName(statField->getFieldType()));
@@ -84,6 +84,10 @@ void StatisticOutputSQLLite::startOfSimulation(){
     }
   }
   err = sqlite3_exec(ppDb, sql.c_str(), NULL, NULL, NULL);
+  if( err != SQLITE_OK ){
+    out.output( "Failed to create table in database=%s with error code=%d\nSQL=%s\n",
+                dbfile.c_str(), err, sql.c_str() );
+  }
 }
 
 std::string StatisticOutputSQLLite::fieldToSQLType(std::string Type){
@@ -112,12 +116,63 @@ void StatisticOutputSQLLite::implStartOutputEntries(StatisticBase* statistic){
   curStatisticSubId = statistic->getStatSubId();
   curStatisticType  = statistic->getStatTypeName();
 
+  if( curStatisticSubId.length() == 0 ){
+    curStatisticSubId = curStatisticName;
+  }
+
   for( size_t i = 0; i < getFieldInfoArray().size(); i++ ) {
     outBuf[i] = "0";
   }
 }
 
 void StatisticOutputSQLLite::implStopOutputEntries(){
+  std::string sql =
+    "INSERT INTO STATS_" +
+    std::to_string(rank) +
+    " ( ComponentName, StatisticName, StatisticSubId, StatisticType,";
+
+  StatisticFieldInfo* statField = nullptr;
+  auto it = getFieldInfoArray().begin();
+  while( it != getFieldInfoArray().end() ){
+    statField = *it;
+    sql += statField->getFieldName();
+    sql += "_";
+    sql += getFieldTypeShortName(statField->getFieldType());
+
+    it++;
+    if( it != getFieldInfoArray().end() ){
+      sql += ",";
+    }else{
+      sql += ") ";
+    }
+  }
+
+  const std::string quote("'");
+
+  sql+= " VALUES(" +
+    quote + curComponentName + "'," +
+    quote + curStatisticName + "'," +
+    quote + curStatisticSubId + "'," +
+    quote + curStatisticType + "',";
+
+  it = getFieldInfoArray().begin();
+  unsigned idx = 0;
+  while( it != getFieldInfoArray().end() ){
+    sql += outBuf[idx];
+    idx++;
+
+    it++;
+    if( it != getFieldInfoArray().end() ){
+      sql += ",";
+    }else{
+      sql += ");";
+    }
+  }
+  int err = sqlite3_exec(ppDb, sql.c_str(), NULL, NULL, NULL);
+  if( err != SQLITE_OK ){
+    out.output( "Failed to commit data to database=%s with error code=%d;\nSQL=%s\n",
+                dbfile.c_str(), err, sql.c_str() );
+  }
 }
 
 void StatisticOutputSQLLite::outputField(fieldHandle_t fieldHandle,
