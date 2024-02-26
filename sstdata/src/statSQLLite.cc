@@ -60,8 +60,17 @@ void StatisticOutputSQLLite::startOfSimulation(){
     outBuf.push_back(std::string(""));
   }
 
+  // drop the previous table
+  std::string sql = "DROP TABLE IF EXISTS STATS_" +
+    std::to_string(rank) + ";";
+  err = sqlite3_exec(ppDb, sql.c_str(), NULL, NULL, NULL);
+  if( err != SQLITE_OK ){
+    out.output( "Failed to drop table in database=%s with error code=%d\nSQL=%s\n",
+                dbfile.c_str(), err, sql.c_str() );
+  }
+
   // build the table creation sql
-  std::string sql =
+  sql =
     "CREATE TABLE IF NOT EXISTS STATS_" +
     std::to_string(rank) +
     " ( ComponentName TEXT NOT NULL, StatisticName TEXT NOT NULL, StatisticSubId TEXT, StatisticType TEXT NOT NULL,";

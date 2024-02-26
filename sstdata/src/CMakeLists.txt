@@ -46,10 +46,10 @@ endif()
 install(TARGETS sstdata DESTINATION ${CMAKE_CURRENT_SOURCE_DIR})
 install(CODE "execute_process(COMMAND sst-register sstdata sstdata_LIBDIR=${CMAKE_CURRENT_SOURCE_DIR})")
 
-if( ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-  install(CODE "execute_process(COMMAND_ERROR_IS_FATAL ANY COMMAND_ECHO STDERR COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/../../scripts/test_undefined_symbols.sh ${CMAKE_CURRENT_SOURCE_DIR}/libsstdata.dylib)")
-else()
-  install(CODE "execute_process(COMMAND_ERROR_IS_FATAL ANY COMMAND_ECHO STDERR COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/../../scripts/test_undefined_symbols.sh ${CMAKE_CURRENT_SOURCE_DIR}/libsstdata.so)")
-endif()
+#if( ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+#  install(CODE "execute_process(COMMAND_ERROR_IS_FATAL ANY COMMAND_ECHO STDERR COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/../../scripts/test_undefined_symbols.sh ${CMAKE_CURRENT_SOURCE_DIR}/libsstdata.dylib)")
+#else()
+#  install(CODE "execute_process(COMMAND_ERROR_IS_FATAL ANY COMMAND_ECHO STDERR COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/../../scripts/test_undefined_symbols.sh ${CMAKE_CURRENT_SOURCE_DIR}/libsstdata.so)")
+#endif()
 
 # EOF

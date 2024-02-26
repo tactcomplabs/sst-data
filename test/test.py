@@ -15,7 +15,7 @@ gen = comp_cpu.setSubComponent("generator", "miranda.CopyGenerator")
 gen.addParams({"verbose" : 0,
     "read_start_address" : 0,
     "request_width" : 16,
-    "request_count" : 65536,
+    "request_count" : 131072,
 })
 
 # Tell SST what statistics handling we want
@@ -60,5 +60,6 @@ link_mem_bus_link = sst.Link("link_mem_bus_link")
 link_mem_bus_link.connect( (comp_l1cache, "low_network_0", "50ps"), (comp_memctrl, "direct_link", "50ps") )
 
 sst.setStatisticOutput("sstdata.statsqllite")
+#sst.setStatisticOutput("sst.statOutputCSV")
 sst.setStatisticLoadLevel(10)
 sst.enableAllStatisticsForAllComponents()
