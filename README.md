@@ -1,4 +1,6 @@
-# sst-data
+# sst-data: An advanced SST Statistics I/O library
+
+![sst-data](documentation/imgs/sst-data.png)
 
 ## Overview
 The `sst-data` library provides alternative `SST::Statistics` output and storage mechanisms beyond what is provided by SST-Core.
