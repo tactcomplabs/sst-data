@@ -73,9 +73,11 @@ protected:
   StatisticOutputArrow()  : SSTDataBase() { ; }
 
 private:
-  std::vector<std::shared_ptr<arrow::RecordBatch>> batches;
-  std::vector<ArrowBuilders> builders;
-  std::vector<std::shared_ptr<arrow::Schema>> schemas;
+  // private data members
+  Output out;                           ///< sst output handler
+  std::vector<std::shared_ptr<arrow::RecordBatch>> batches; ///< arrow batches
+  std::vector<ArrowBuilders> builders;                      ///< arrow builders
+  std::vector<std::shared_ptr<arrow::Schema>> schemas;      ///< arrow schemas
 
 };  // end StatOutputTest
 };  // end SST::Statistics

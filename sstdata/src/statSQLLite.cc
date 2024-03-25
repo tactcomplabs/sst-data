@@ -42,7 +42,7 @@ bool StatisticOutputSQLLite::checkOutputParameters(){
 }
 
 void StatisticOutputSQLLite::printUsage(){
-  out.output(" : Usage - Sends all statistic output compilation test.\n");
+  out.output(" : Usage - Sends all statistic output to SQLLite3.\n");
   out.output(" : help = Force Statistic Output to display usage\n");
   out.output(" : dbfile = </path/to/Statistics.sql> - Database output file; default = ./db.sql\n");
 }

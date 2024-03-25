@@ -14,6 +14,9 @@ namespace SST::Statistics{
 
 StatisticOutputArrow::StatisticOutputArrow(Params& outputParameters)
   : SSTDataBase(outputParameters), batches(), builders(), schemas() {
+  const int Verbosity = outputParameters.find<int>("verbose", 0);
+  out.init("statarrow[:@p:@t]: ",
+              Verbosity, 0, SST::Output::STDOUT);
   setStatisticOutputName("StatisticOutputArrow");
 }
 
@@ -22,16 +25,14 @@ bool StatisticOutputArrow::checkOutputParameters(){
 }
 
 void StatisticOutputArrow::printUsage(){
-  Output out("", 0, 0, Output::STDOUT);
-  out.output(" : Usage - Sends all statistic output compilation test.\n");
+  out.output(" : Usage - Sends all statistic output to Apache Arrow\n");
+  out.output(" : help = Force Statistic Output to display usage\n");
 }
 
 void StatisticOutputArrow::startOfSimulation(){
-  std::cout << "startOfSimulation" << std::endl;
 }
 
 void StatisticOutputArrow::endOfSimulation(){
-  std::cout << "endOfSimulation" << std::endl;
 }
 
 static bool fieldTypeToArrowField(std::vector<StatisticOutputArrow::ArrowBuilders> & builders,
@@ -85,11 +86,13 @@ void StatisticOutputArrow::implStartOutputEntries(StatisticBase* statistic){
   const std::string m_currentStatisticSubId = statistic->getStatSubId();
   const std::string m_currentStatisticType  = statistic->getStatTypeName();
 
+#if 0
   std::cout << "implStartOutputEntries" << std::endl
             << 1 << m_currentComponentName << '\t'
             << 2 << m_currentStatisticName << '\t'
             << 3 << m_currentStatisticSubId << '\t'
             << 4 << m_currentStatisticType << std::endl;
+#endif
 
   auto arr = getFieldInfoArray();
   SST::Statistics::StatisticFieldInfo * val = nullptr;
@@ -107,15 +110,12 @@ void StatisticOutputArrow::implStartOutputEntries(StatisticBase* statistic){
                                fields,
                                val->getFieldName(),
                                ptr->fieldName());
-    //std::cout << "***\t" << val->getStatName() << ' ' << val->getFieldName() << ' ' << val->getFieldUniqueName() << ' ' << ptr->fieldName() << ' ' << ptr->shortName() << std::endl;
   }
-  
+
   schemas.emplace_back(arrow::schema(fields));
 }
 
 void StatisticOutputArrow::implStopOutputEntries() {
-  std::cout << "implStopOutputEntries" << std::endl;
-
   std::vector<std::shared_ptr<arrow::Array>> arrays;
   arrays.reserve(builders.size());
 
@@ -154,8 +154,7 @@ void StatisticOutputArrow::implStopOutputEntries() {
 void StatisticOutputArrow::outputField(fieldHandle_t fieldHandle, int32_t data){
   if(std::holds_alternative<arrow::Int32Builder>(builders[fieldHandle])) {
     std::get<arrow::Int32Builder>(builders[fieldHandle]).Append(data);
-  }
-  else {
+  }else {
     switch(builders[fieldHandle].index()) {
         case 1:
            std::get<arrow::Int32Builder>(builders[fieldHandle]).Append(static_cast<std::int32_t>(data));
@@ -185,8 +184,7 @@ void StatisticOutputArrow::outputField(fieldHandle_t fieldHandle, int32_t data){
 void StatisticOutputArrow::outputField(fieldHandle_t fieldHandle, uint32_t data){
   if(std::holds_alternative<arrow::UInt32Builder>(builders[fieldHandle])) {
     std::get<arrow::UInt32Builder>(builders[fieldHandle]).Append(data);
-  }
-  else {
+  }else {
     switch(builders[fieldHandle].index()) {
         case 1:
            std::get<arrow::Int32Builder>(builders[fieldHandle]).Append(static_cast<std::int32_t>(data));
@@ -216,8 +214,7 @@ void StatisticOutputArrow::outputField(fieldHandle_t fieldHandle, uint32_t data)
 void StatisticOutputArrow::outputField(fieldHandle_t fieldHandle, int64_t data){
   if(std::holds_alternative<arrow::Int64Builder>(builders[fieldHandle])) {
     std::get<arrow::Int64Builder>(builders[fieldHandle]).Append(data);
-  }
-  else {
+  }else {
     switch(builders[fieldHandle].index()) {
         case 1:
            std::get<arrow::Int32Builder>(builders[fieldHandle]).Append(static_cast<std::int32_t>(data));
@@ -247,8 +244,7 @@ void StatisticOutputArrow::outputField(fieldHandle_t fieldHandle, int64_t data){
 void StatisticOutputArrow::outputField(fieldHandle_t fieldHandle, uint64_t data){
   if(std::holds_alternative<arrow::UInt64Builder>(builders[fieldHandle])) {
     std::get<arrow::UInt64Builder>(builders[fieldHandle]).Append(data);
-  }
-  else {
+  }else {
     switch(builders[fieldHandle].index()) {
         case 1:
            std::get<arrow::Int32Builder>(builders[fieldHandle]).Append(static_cast<std::int32_t>(data));
@@ -278,8 +274,7 @@ void StatisticOutputArrow::outputField(fieldHandle_t fieldHandle, uint64_t data)
 void StatisticOutputArrow::outputField(fieldHandle_t fieldHandle, float data){
   if(std::holds_alternative<arrow::FloatBuilder>(builders[fieldHandle])) {
     std::get<arrow::FloatBuilder>(builders[fieldHandle]).Append(data);
-  }
-  else {
+  }else {
     switch(builders[fieldHandle].index()) {
         case 1:
            std::get<arrow::Int32Builder>(builders[fieldHandle]).Append(static_cast<std::int32_t>(data));
@@ -309,8 +304,7 @@ void StatisticOutputArrow::outputField(fieldHandle_t fieldHandle, float data){
 void StatisticOutputArrow::outputField(fieldHandle_t fieldHandle, double data){
   if(std::holds_alternative<arrow::DoubleBuilder>(builders[fieldHandle])) {
     std::get<arrow::DoubleBuilder>(builders[fieldHandle]).Append(data);
-  }
-  else {
+  }else {
     switch(builders[fieldHandle].index()) {
         case 1:
            std::get<arrow::Int32Builder>(builders[fieldHandle]).Append(static_cast<std::int32_t>(data));
