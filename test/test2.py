@@ -59,7 +59,7 @@ link_cpu_cache_link.setNoCut()
 link_mem_bus_link = sst.Link("link_mem_bus_link")
 link_mem_bus_link.connect( (comp_l1cache, "low_network_0", "50ps"), (comp_memctrl, "direct_link", "50ps") )
 
-sst.setStatisticOutput("sstdata.statsqllite")
-#sst.setStatisticOutput("sst.statOutputCSV")
+sst.setStatisticOutput("sstdata.statsqllite",
+                      {"dbfile" : "test2.sql"})
 sst.setStatisticLoadLevel(10)
 sst.enableAllStatisticsForAllComponents()

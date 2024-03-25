@@ -43,8 +43,8 @@ if(SSTDATA_ENABLE_SQLLITE)
   target_link_libraries(sstdata PRIVATE ${SQLite3_LIBRARIES})
 endif()
 
-install(TARGETS sstdata DESTINATION ${CMAKE_CURRENT_SOURCE_DIR})
-install(CODE "execute_process(COMMAND sst-register sstdata sstdata_LIBDIR=${CMAKE_CURRENT_SOURCE_DIR})")
+install(TARGETS sstdata DESTINATION ${SST_ELEMENT_LIBRARY_LIBDIR})
+install(CODE "execute_process(COMMAND sst-register sstdata sstdata_LIBDIR=${SST_ELEMENT_LIBRARY_LIBDIR})")
 
 #if( ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 #  install(CODE "execute_process(COMMAND_ERROR_IS_FATAL ANY COMMAND_ECHO STDERR COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/../../scripts/test_undefined_symbols.sh ${CMAKE_CURRENT_SOURCE_DIR}/libsstdata.dylib)")

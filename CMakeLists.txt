@@ -48,6 +48,10 @@ execute_process(COMMAND sst-config --ELEMENT_LDFLAGS
                 OUTPUT_VARIABLE SST_LDFLAGS
                 OUTPUT_STRIP_TRAILING_WHITESPACE
 )
+execute_process(COMMAND sst-config SST_ELEMENT_LIBRARY SST_ELEMENT_LIBRARY_LIBDIR
+                OUTPUT_VARIABLE SST_ELEMENT_LIBRARY_LIBDIR
+                OUTPUT_STRIP_TRAILING_WHITESPACE
+)
 
 #-- Compiler Options
 # Compiler Options
@@ -134,6 +138,6 @@ add_custom_target(uninstall COMMAND "${CMAKE_CURRENT_SOURCE_DIR}/scripts/uninsta
 
 #-- Subdirectories
 add_subdirectory(sstdata)
-#add_subdirectory(test)
+add_subdirectory(test)
 
 # EOF
