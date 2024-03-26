@@ -28,7 +28,7 @@ foreach(testSrc ${TEST_SRCS})
   # Add the test for execution
   add_test(NAME ${testName}
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    COMMAND ${SST_EXECUTABLE} --add-lib-path=../sstdata/src/ ${CMAKE_CURRENT_SOURCE_DIR}/${testName}.py)
+    COMMAND ${SST_EXECUTABLE} --add-lib-path=../build/sstdata/src/ ${CMAKE_CURRENT_SOURCE_DIR}/${testName}.py)
   set_tests_properties(${testName}
     PROPERTIES FAIL_REGULAR_EXPRESSION "[^a-z]Error;ERROR;Failed")
 endforeach(testSrc)
