@@ -133,11 +133,14 @@ if(SSTDATA_ENABLE_TESTING)
   enable_testing()
 endif()
 
+option(SSTDATA_ENABLE_BENCHMARK "Enable Benchmarking" ON)
+
 #-- Custom Commands
 add_custom_target(uninstall COMMAND "${CMAKE_CURRENT_SOURCE_DIR}/scripts/uninstall.sh")
 
 #-- Subdirectories
 add_subdirectory(sstdata)
 add_subdirectory(test)
+add_subdirectory(benchmark)
 
 # EOF

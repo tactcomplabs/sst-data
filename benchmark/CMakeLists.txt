@@ -1,5 +1,5 @@
 #
-# sst-data/test CMake
+# sst-data/benchmark CMake
 #
 # Copyright (C) 2017-2024 Tactical Computing Laboratories, LLC
 # All Rights Reserved
@@ -8,11 +8,11 @@
 #
 
 #------- TESTS  ---------------
-message(STATUS "SST-DATA CTest Setup")
+message(STATUS "SST-DATA Benchmark Setup")
 
 file(GLOB TEST_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.py)
 
-if(SSTDATA_ENABLE_TESTING)
+if(SSTDATA_ENABLE_BENCHMARK)
 
 find_program(SST_EXECUTABLE sst)
   if (SST_EXECUTABLE)
