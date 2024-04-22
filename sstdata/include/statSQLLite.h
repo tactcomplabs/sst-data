@@ -33,7 +33,7 @@ public:
   )
 
   SST_ELI_DOCUMENT_PARAMS(
-    { "dbfile",     "database output file",     "db.sql"},
+    { "dbfile",     "database output file",     "Statistics.sql"},
   )
 
   StatisticOutputSQLLite(Params& outputParameters);

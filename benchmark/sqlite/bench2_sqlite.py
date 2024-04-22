@@ -3,7 +3,7 @@ import sst
 # Define SST core options
 #sst.setProgramOption("timebase", "1ps")
 
-tiles = 4
+tiles = 32
 
 for x in range (0, tiles):
 
@@ -18,8 +18,8 @@ for x in range (0, tiles):
   gen = comp_cpu.setSubComponent("generator", "miranda.Stencil3DBenchGenerator")
   gen.addParams({
 	  "verbose" : 0,
-	  "nx" : 30,
-	  "ny" : 20,
+	  "nx" : 10,
+	  "ny" : 10,
 	  "nz" : 10,
   })
 
@@ -61,8 +61,6 @@ for x in range (0, tiles):
 
 sst.setStatisticLoadLevel(16)
 sst.enableAllStatisticsForAllComponents({"type":"sst.AccumulatorStatistic"})
-sst.setStatisticOutput("sst.statOutputCSV")
-sst.setStatisticOutputOptions( {
-        "filepath"  : "bench2.csv",
-        "separator" : ", "
-} )
+
+sst.setStatisticOutput("sstdata.statsqllite",
+                       {"dbfile" : "bench2.sql"})
