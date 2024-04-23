@@ -61,8 +61,7 @@ void StatisticOutputSQLLite::startOfSimulation(){
   }
 
   // drop the previous table
-  std::string sql = "DROP TABLE IF EXISTS STATS_" +
-    std::to_string(rank) + ";";
+  std::string sql = "DROP TABLE IF EXISTS STATS_" + std::to_string(rank) + ";";
   err = sqlite3_exec(ppDb, sql.c_str(), NULL, NULL, NULL);
   if( err != SQLITE_OK ){
     out.output( "Failed to drop table in database=%s with error code=%d\nSQL=%s\n",
