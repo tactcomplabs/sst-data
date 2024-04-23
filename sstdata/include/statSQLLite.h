@@ -33,7 +33,8 @@ public:
   )
 
   SST_ELI_DOCUMENT_PARAMS(
-    { "dbfile",     "database output file",     "Statistics.sql"},
+    { "dbfile",     "database output file",       "Statistics.sql"},
+    { "table",      "name of the database table", "STATS_[rank]"},
   )
 
   StatisticOutputSQLLite(Params& outputParameters);
@@ -71,6 +72,7 @@ private:
 
   // parameters
   std::string dbfile;                   ///< database file
+  std::string tablename;                ///< table name
 
   // private data members
   Output out;                           ///< sst output handler

@@ -31,6 +31,8 @@ bool StatisticOutputSQLLite::checkOutputParameters(){
 
   // read all the parameters
   dbfile = getOutputParameters().find<std::string>("dbfile", "Statistics.sql");
+  tablename = getOutputParameters().find<std::string>("tablename", "STATS_");
+  tablename += std::to_string(rank);
 
   int err = sqlite3_open( dbfile.c_str(), &ppDb );
   if( err != SQLITE_OK ){
@@ -61,17 +63,16 @@ void StatisticOutputSQLLite::startOfSimulation(){
   }
 
   // drop the previous table
-  std::string sql = "DROP TABLE IF EXISTS STATS_" + std::to_string(rank) + ";";
+  std::string sql = "DROP TABLE IF EXISTS " + tablename + ";";
   err = sqlite3_exec(ppDb, sql.c_str(), NULL, NULL, NULL);
   if( err != SQLITE_OK ){
-    out.output( "Failed to drop table in database=%s with error code=%d\nSQL=%s\n",
-                dbfile.c_str(), err, sql.c_str() );
+    out.output( "Failed to drop table=%s in database=%s with error code=%d\nSQL=%s\n",
+                tablename.c_str(), dbfile.c_str(), err, sql.c_str() );
   }
 
   // build the table creation sql
   sql =
-    "CREATE TABLE IF NOT EXISTS STATS_" +
-    std::to_string(rank) +
+    "CREATE TABLE IF NOT EXISTS " + tablename +
     " ( ComponentName TEXT NOT NULL, StatisticName TEXT NOT NULL, StatisticSubId TEXT, StatisticType TEXT NOT NULL,";
 
   StatisticFieldInfo* statField = nullptr;
@@ -93,8 +94,8 @@ void StatisticOutputSQLLite::startOfSimulation(){
   }
   err = sqlite3_exec(ppDb, sql.c_str(), NULL, NULL, NULL);
   if( err != SQLITE_OK ){
-    out.output( "Failed to create table in database=%s with error code=%d\nSQL=%s\n",
-                dbfile.c_str(), err, sql.c_str() );
+    out.output( "Failed to create table=%s in database=%s with error code=%d\nSQL=%s\n",
+                tablename.c_str(), dbfile.c_str(), err, sql.c_str() );
   }
 }
 
@@ -135,8 +136,7 @@ void StatisticOutputSQLLite::implStartOutputEntries(StatisticBase* statistic){
 
 void StatisticOutputSQLLite::implStopOutputEntries(){
   std::string sql =
-    "INSERT INTO STATS_" +
-    std::to_string(rank) +
+    "INSERT INTO " + tablename +
     " ( ComponentName, StatisticName, StatisticSubId, StatisticType,";
 
   StatisticFieldInfo* statField = nullptr;
