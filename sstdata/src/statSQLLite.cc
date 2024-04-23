@@ -47,6 +47,7 @@ void StatisticOutputSQLLite::printUsage(){
   out.output(" : Usage - Sends all statistic output to SQLLite3.\n");
   out.output(" : help = Force Statistic Output to display usage\n");
   out.output(" : dbfile = </path/to/Statistics.sql> - Database output file; default = ./db.sql\n");
+  out.output(" : tablename = TableNameX - Database table name w/o rank info; default = STATS_\n");
 }
 
 void StatisticOutputSQLLite::startOfSimulation(){
