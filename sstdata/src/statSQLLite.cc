@@ -31,6 +31,8 @@ bool StatisticOutputSQLLite::checkOutputParameters(){
 
   // read all the parameters
   dbfile = getOutputParameters().find<std::string>("dbfile", "Statistics.sql");
+  tablename = getOutputParameters().find<std::string>("tablename", "STATS_");
+  tablename += std::to_string(rank);
 
   int err = sqlite3_open( dbfile.c_str(), &ppDb );
   if( err != SQLITE_OK ){
@@ -45,6 +47,7 @@ void StatisticOutputSQLLite::printUsage(){
   out.output(" : Usage - Sends all statistic output to SQLLite3.\n");
   out.output(" : help = Force Statistic Output to display usage\n");
   out.output(" : dbfile = </path/to/Statistics.sql> - Database output file; default = ./db.sql\n");
+  out.output(" : tablename = TableNameX - Database table name w/o rank info; default = STATS_\n");
 }
 
 void StatisticOutputSQLLite::startOfSimulation(){
@@ -54,6 +57,11 @@ void StatisticOutputSQLLite::startOfSimulation(){
                 dbfile.c_str(), err );
   }
 
+  // setup the transaction engine
+  sqlite3_exec(ppDb, "BEGIN TRANSACTION", NULL, NULL, NULL);
+  sqlite3_exec(ppDb, "PRAGMA synchronous = OFF", NULL, NULL, NULL);
+  sqlite3_exec(ppDb, "PRAGMA journal_mode = MEMORY", NULL, NULL, NULL);
+
   // init the output buffer as string objects
   for( auto it = getFieldInfoArray().begin();
        it != getFieldInfoArray().end(); it++ ){
@@ -61,18 +69,16 @@ void StatisticOutputSQLLite::startOfSimulation(){
   }
 
   // drop the previous table
-  std::string sql = "DROP TABLE IF EXISTS STATS_" +
-    std::to_string(rank) + ";";
+  std::string sql = "DROP TABLE IF EXISTS " + tablename + ";";
   err = sqlite3_exec(ppDb, sql.c_str(), NULL, NULL, NULL);
   if( err != SQLITE_OK ){
-    out.output( "Failed to drop table in database=%s with error code=%d\nSQL=%s\n",
-                dbfile.c_str(), err, sql.c_str() );
+    out.output( "Failed to drop table=%s in database=%s with error code=%d\nSQL=%s\n",
+                tablename.c_str(), dbfile.c_str(), err, sql.c_str() );
   }
 
   // build the table creation sql
   sql =
-    "CREATE TABLE IF NOT EXISTS STATS_" +
-    std::to_string(rank) +
+    "CREATE TABLE IF NOT EXISTS " + tablename +
     " ( ComponentName TEXT NOT NULL, StatisticName TEXT NOT NULL, StatisticSubId TEXT, StatisticType TEXT NOT NULL,";
 
   StatisticFieldInfo* statField = nullptr;
@@ -94,8 +100,8 @@ void StatisticOutputSQLLite::startOfSimulation(){
   }
   err = sqlite3_exec(ppDb, sql.c_str(), NULL, NULL, NULL);
   if( err != SQLITE_OK ){
-    out.output( "Failed to create table in database=%s with error code=%d\nSQL=%s\n",
-                dbfile.c_str(), err, sql.c_str() );
+    out.output( "Failed to create table=%s in database=%s with error code=%d\nSQL=%s\n",
+                tablename.c_str(), dbfile.c_str(), err, sql.c_str() );
   }
 }
 
@@ -114,6 +120,7 @@ std::string StatisticOutputSQLLite::fieldToSQLType(std::string Type){
 
 void StatisticOutputSQLLite::endOfSimulation(){
   if( ppDb ){
+    sqlite3_exec(ppDb, "END TRANSACTION", NULL, NULL, NULL);
     sqlite3_close(ppDb);
   }
 }
@@ -136,8 +143,7 @@ void StatisticOutputSQLLite::implStartOutputEntries(StatisticBase* statistic){
 
 void StatisticOutputSQLLite::implStopOutputEntries(){
   std::string sql =
-    "INSERT INTO STATS_" +
-    std::to_string(rank) +
+    "INSERT INTO " + tablename +
     " ( ComponentName, StatisticName, StatisticSubId, StatisticType,";
 
   StatisticFieldInfo* statField = nullptr;

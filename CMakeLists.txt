@@ -98,6 +98,9 @@ endif()
 
 #-- SQLLite3 Dependency
 if(SSTDATA_ENABLE_SQLLITE)
+  if(SQLITE3_PATH)
+    set(CMAKE_PREFIX_PATH "${SQLITE3_PATH}")
+  endif()
   find_package(SQLite3)
   message(STATUS "[SQLITE3] Found header path at ${SQLite3_INCLUDE_DIRS}")
   message(STATUS "[SQLITE3] Found libraries at ${SQLite3_LIBRARIES}")
