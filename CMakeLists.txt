@@ -98,6 +98,9 @@ endif()
 
 #-- SQLLite3 Dependency
 if(SSTDATA_ENABLE_SQLLITE)
+  if(SQLITE3_PATH)
+    set(CMAKE_PREFIX_PATH "${SQLITE3_PATH}")
+  endif()
   find_package(SQLite3)
   message(STATUS "[SQLITE3] Found header path at ${SQLite3_INCLUDE_DIRS}")
   message(STATUS "[SQLITE3] Found libraries at ${SQLite3_LIBRARIES}")
@@ -133,14 +136,11 @@ if(SSTDATA_ENABLE_TESTING)
   enable_testing()
 endif()
 
-option(SSTDATA_ENABLE_BENCHMARK "Enable Benchmarking" ON)
-
 #-- Custom Commands
 add_custom_target(uninstall COMMAND "${CMAKE_CURRENT_SOURCE_DIR}/scripts/uninstall.sh")
 
 #-- Subdirectories
 add_subdirectory(sstdata)
 add_subdirectory(test)
-add_subdirectory(benchmark)
 
 # EOF

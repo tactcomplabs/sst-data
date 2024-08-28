@@ -57,6 +57,11 @@ void StatisticOutputSQLLite::startOfSimulation(){
                 dbfile.c_str(), err );
   }
 
+  // setup the transaction engine
+  sqlite3_exec(ppDb, "BEGIN TRANSACTION", NULL, NULL, NULL);
+  sqlite3_exec(ppDb, "PRAGMA synchronous = OFF", NULL, NULL, NULL);
+  sqlite3_exec(ppDb, "PRAGMA journal_mode = MEMORY", NULL, NULL, NULL);
+
   // init the output buffer as string objects
   for( auto it = getFieldInfoArray().begin();
        it != getFieldInfoArray().end(); it++ ){
@@ -115,6 +120,7 @@ std::string StatisticOutputSQLLite::fieldToSQLType(std::string Type){
 
 void StatisticOutputSQLLite::endOfSimulation(){
   if( ppDb ){
+    sqlite3_exec(ppDb, "END TRANSACTION", NULL, NULL, NULL);
     sqlite3_close(ppDb);
   }
 }
